@@ -151,3 +151,26 @@ for eig_i = [106,109,110,117,120,125]
     axis square
     i_plot = i_plot + 1;
 end
+
+%% Compute residual
+figure
+A_matrix = W;
+G_matrix = diag(sum(W,2));
+L_matrix = diag(sum(W,1));
+V = E;
+D1 = diag(D);
+
+RES1 = sqrt(real(dot(V,L_matrix*V) - dot(V,A_matrix'*V*D1+A_matrix*V*D1') + dot(V, G_matrix*V*abs(D1).^2)) ./ real(dot(V,G_matrix*V)));
+
+[~,I3] = sort(RES1,'descend');
+D1 = D;
+D1 = D1(I3);
+RES1 = RES1(I3);
+
+scatter(real(full(D1)),imag(full(D1)),15,RES1,'filled')
+xlim([-1.2,1.2])
+ylim([-1.2,1.2])
+axis square
+colormap jet
+colorbar
+clim([0,1])
